@@ -58,9 +58,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold">Your Plans</h1>
+    <div className="max-w-4xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold">Your Plans</h1>
         <Link href="/dashboard/new">
           <Button>New Plan</Button>
         </Link>
@@ -88,13 +88,13 @@ export default function DashboardPage() {
                 )}
               </CardHeader>
               <CardContent>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="text-sm text-muted-foreground">
                     {format(new Date(plan.startDate), "MMM d")} –{" "}
                     {format(new Date(plan.endDate), "MMM d, yyyy")} ·{" "}
                     {plan._count.responses} response{plan._count.responses !== 1 ? "s" : ""}
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <Button
                       variant="outline"
                       size="sm"

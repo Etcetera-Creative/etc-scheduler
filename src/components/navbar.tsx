@@ -22,21 +22,21 @@ export function Navbar() {
 
   return (
     <nav className="border-b bg-background">
-      <div className="max-w-4xl mx-auto px-8 h-14 flex items-center justify-between">
-        <div className="flex items-center gap-6">
-          <Link href={loggedIn ? "/dashboard" : "/"} className="font-semibold text-lg">
+      <div className="max-w-4xl mx-auto px-4 sm:px-8 h-14 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-3 sm:gap-6 min-w-0">
+          <Link href={loggedIn ? "/dashboard" : "/"} className="font-semibold text-lg shrink-0">
             Etcetera
           </Link>
           {loggedIn && (
             <Link
               href="/dashboard"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors truncate"
             >
               Dashboard
             </Link>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           {loggedIn ? (
             <>
               <Link href="/dashboard/new">

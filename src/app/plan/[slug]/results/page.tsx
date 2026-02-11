@@ -86,20 +86,21 @@ export default function ResultsPage() {
   const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/plan/${plan.slug}` : "";
 
   return (
-    <div className="max-w-4xl mx-auto p-8 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">{plan.name}</h1>
+    <div className="max-w-4xl mx-auto px-4 sm:px-8 py-6 sm:py-8 space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="text-2xl sm:text-3xl font-bold">{plan.name}</h1>
           {plan.description && (
             <p className="text-muted-foreground mt-1">{plan.description}</p>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 shrink-0">
           <Link href={`/plan/${plan.slug}`}>
-            <Button variant="outline">Share Page</Button>
+            <Button variant="outline" size="sm">Share Page</Button>
           </Link>
           <Button
             variant="outline"
+            size="sm"
             onClick={() => {
               navigator.clipboard.writeText(shareUrl);
               setCopied(true);

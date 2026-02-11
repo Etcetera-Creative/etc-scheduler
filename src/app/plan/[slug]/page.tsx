@@ -110,7 +110,7 @@ export default function PlanGuestPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-8">
+    <div className="max-w-2xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
       <Card>
         <CardHeader>
           <CardTitle>{plan.name}</CardTitle>

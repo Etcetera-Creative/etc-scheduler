@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-8">
       <div className="max-w-2xl text-center space-y-6">
         <h1 className="text-5xl font-bold tracking-tight">
           Etcetera Scheduler

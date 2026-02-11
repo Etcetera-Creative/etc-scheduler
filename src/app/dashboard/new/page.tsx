@@ -41,7 +41,7 @@ export default function NewPlanPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-8">
+    <div className="max-w-2xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
       <Card>
         <CardHeader>
           <CardTitle>Create a New Plan</CardTitle>
