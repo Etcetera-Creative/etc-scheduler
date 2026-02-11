@@ -94,13 +94,14 @@ export default function ResultsPage() {
             <p className="text-muted-foreground mt-1">{plan.description}</p>
           )}
         </div>
-        <div className="flex flex-wrap gap-2 shrink-0">
-          <Link href={`/plan/${plan.slug}`}>
-            <Button variant="outline" size="sm">Share Page</Button>
+        <div className="flex gap-2 w-full sm:w-auto">
+          <Link href={`/plan/${plan.slug}`} className="flex-1 sm:flex-none">
+            <Button variant="outline" size="sm" className="w-full sm:w-auto">Share Page</Button>
           </Link>
           <Button
             variant="outline"
             size="sm"
+            className="flex-1 sm:flex-none"
             onClick={() => {
               navigator.clipboard.writeText(shareUrl);
               setCopied(true);

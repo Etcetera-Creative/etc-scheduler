@@ -94,10 +94,11 @@ export default function DashboardPage() {
                     {format(new Date(plan.endDate), "MMM d, yyyy")} ·{" "}
                     {plan._count.responses} response{plan._count.responses !== 1 ? "s" : ""}
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex gap-2 w-full sm:w-auto">
                     <Button
                       variant="outline"
                       size="sm"
+                      className="flex-1 sm:flex-none"
                       onClick={() => {
                         navigator.clipboard.writeText(
                           `${window.location.origin}/plan/${plan.slug}`
@@ -106,12 +107,13 @@ export default function DashboardPage() {
                     >
                       Copy Link
                     </Button>
-                    <Link href={`/plan/${plan.slug}/results`}>
-                      <Button size="sm">View Results</Button>
+                    <Link href={`/plan/${plan.slug}/results`} className="flex-1 sm:flex-none">
+                      <Button size="sm" className="w-full">View Results</Button>
                     </Link>
                     <Button
                       variant="destructive"
                       size="sm"
+                      className="flex-1 sm:flex-none"
                       onClick={() => handleDelete(plan.slug, plan.name)}
                     >
                       Delete
