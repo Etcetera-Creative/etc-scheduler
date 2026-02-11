@@ -27,6 +27,7 @@ model Response {
   planId        String
   guestName     String
   selectedDates DateTime[]
+  comment       String?
   createdAt     DateTime @default(now())
   plan          Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
 

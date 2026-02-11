@@ -6,14 +6,17 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 import { CalendarGrid } from "@/components/calendar-grid";
 import { ComparisonCalendar, getPersonColor } from "@/components/comparison-calendar";
 import { format, eachDayOfInterval, parseISO, isSameDay } from "date-fns";
+import { createClient } from "@/lib/supabase/client";
 
 interface ResponseData {
   id: string;
   guestName: string;
   selectedDates: string[];
+  comment: string | null;
 }
 
 interface PlanWithResponses {
@@ -23,6 +26,7 @@ interface PlanWithResponses {
   description: string | null;
   startDate: string;
   endDate: string;
+  creatorId: string;
   responses: ResponseData[];
 }
 
@@ -36,12 +40,26 @@ export default function ResultsPage() {
   const [selectedPerson, setSelectedPerson] = useState<ResponseData | null>(null);
   const [compareMode, setCompareMode] = useState(false);
   const [selectedPeople, setSelectedPeople] = useState<Set<string>>(new Set());
+  const [activeTab, setActiveTab] = useState<"heatmap" | "responses">("heatmap");
+  const [isOwner, setIsOwner] = useState(false);
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [editedDescription, setEditedDescription] = useState("");
+  const [savingDescription, setSavingDescription] = useState(false);
 
   useEffect(() => {
     async function load() {
       const res = await fetch(`/api/plans/${slug}/results`);
       if (res.ok) {
-        setPlan(await res.json());
+        const planData = await res.json();
+        setPlan(planData);
+        setEditedDescription(planData.description || "");
+
+        // Check if current user is the owner
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user && planData.creatorId === user.id) {
+          setIsOwner(true);
+        }
       }
       setLoading(false);
     }
@@ -89,13 +107,73 @@ export default function ResultsPage() {
 
   const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/plan/${plan.slug}` : "";
 
+  async function saveDescription() {
+    if (!plan) return;
+    setSavingDescription(true);
+    
+    const res = await fetch(`/api/plans/${slug}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ description: editedDescription }),
+    });
+
+    if (res.ok) {
+      const updated = await res.json();
+      setPlan({ ...plan, description: updated.description });
+      setIsEditingDescription(false);
+    }
+    setSavingDescription(false);
+  }
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-8 py-6 sm:py-8 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h1 className="text-2xl sm:text-3xl font-bold">{plan.name}</h1>
-          {plan.description && (
-            <p className="text-muted-foreground mt-1">{plan.description}</p>
+          {isEditingDescription ? (
+            <div className="mt-2 space-y-2">
+              <Textarea
+                value={editedDescription}
+                onChange={(e) => setEditedDescription(e.target.value)}
+                rows={2}
+                placeholder="Add a description..."
+              />
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  onClick={saveDescription}
+                  disabled={savingDescription}
+                >
+                  {savingDescription ? "Saving..." : "Save"}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setIsEditingDescription(false);
+                    setEditedDescription(plan.description || "");
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-1 flex items-start gap-2">
+              <p className="text-muted-foreground flex-1">
+                {plan.description || (isOwner ? "No description" : "")}
+              </p>
+              {isOwner && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsEditingDescription(true)}
+                  className="h-auto py-1 px-2 text-xs"
+                >
+                  Edit
+                </Button>
+              )}
+            </div>
           )}
         </div>
         <div className="flex gap-2 w-full sm:w-auto">
@@ -117,7 +195,32 @@ export default function ResultsPage() {
         </div>
       </div>
 
-      {/* Heatmap */}
+      {/* Tab Navigation */}
+      <div className="flex gap-1 border-b">
+        <button
+          onClick={() => setActiveTab("heatmap")}
+          className={`px-4 py-2 font-medium text-sm transition-colors ${
+            activeTab === "heatmap"
+              ? "border-b-2 border-primary text-primary"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          Heatmap
+        </button>
+        <button
+          onClick={() => setActiveTab("responses")}
+          className={`px-4 py-2 font-medium text-sm transition-colors ${
+            activeTab === "responses"
+              ? "border-b-2 border-primary text-primary"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          Responses
+        </button>
+      </div>
+
+      {/* Heatmap Tab */}
+      {activeTab === "heatmap" && (
       <Card>
         <CardHeader>
           <CardTitle>Availability Heatmap</CardTitle>
@@ -135,7 +238,11 @@ export default function ResultsPage() {
           />
         </CardContent>
       </Card>
+      )}
 
+      {/* Responses Tab */}
+      {activeTab === "responses" && (
+      <>
       {/* Individual Person View */}
       {selectedPerson && !compareMode && (
         <Card>
@@ -294,17 +401,24 @@ export default function ResultsPage() {
                           setSelectedPerson(selectedPerson?.id === r.id ? null : r);
                         }
                       }}
-                      className="flex-1 flex items-start justify-between text-left"
+                      className="flex-1 flex flex-col items-start text-left"
                     >
-                      <div>
-                        <p className="font-medium">{r.guestName}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {r.selectedDates.map((d) => format(parseISO(d), "MMM d")).join(", ")}
-                        </p>
+                      <div className="w-full flex items-start justify-between">
+                        <div className="flex-1">
+                          <p className="font-medium">{r.guestName}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {r.selectedDates.map((d) => format(parseISO(d), "MMM d")).join(", ")}
+                          </p>
+                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {r.selectedDates.length} date{r.selectedDates.length !== 1 ? "s" : ""}
+                        </span>
                       </div>
-                      <span className="text-sm text-muted-foreground">
-                        {r.selectedDates.length} date{r.selectedDates.length !== 1 ? "s" : ""}
-                      </span>
+                      {r.comment && (
+                        <p className="text-sm text-muted-foreground mt-2 italic">
+                          &ldquo;{r.comment}&rdquo;
+                        </p>
+                      )}
                     </button>
                   </div>
                 );
@@ -313,6 +427,8 @@ export default function ResultsPage() {
           )}
         </CardContent>
       </Card>
+      </>
+      )}
     </div>
   );
 }

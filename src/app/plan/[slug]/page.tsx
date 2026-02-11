@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarGrid } from "@/components/calendar-grid";
 import { parseISO, isSameDay } from "date-fns";
@@ -23,6 +24,7 @@ export default function PlanGuestPage() {
 
   const [plan, setPlan] = useState<PlanData | null>(null);
   const [guestName, setGuestName] = useState("");
+  const [comment, setComment] = useState("");
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -63,6 +65,7 @@ export default function PlanGuestPage() {
       body: JSON.stringify({
         guestName,
         selectedDates: selectedDates.map((d) => d.toISOString()),
+        comment: comment.trim() || null,
       }),
     });
 
@@ -131,6 +134,17 @@ export default function PlanGuestPage() {
                 value={guestName}
                 onChange={(e) => setGuestName(e.target.value)}
                 required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="comment">Comment (Optional)</Label>
+              <Textarea
+                id="comment"
+                placeholder="Any notes or preferences..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                rows={3}
               />
             </div>
 

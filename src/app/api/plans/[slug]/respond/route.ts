@@ -15,7 +15,7 @@ export async function POST(
   }
 
   const body = await request.json();
-  const { guestName, selectedDates } = body;
+  const { guestName, selectedDates, comment } = body;
 
   if (!guestName || !selectedDates || selectedDates.length === 0) {
     return NextResponse.json(
@@ -29,6 +29,7 @@ export async function POST(
       planId: plan.id,
       guestName,
       selectedDates: selectedDates.map((d: string) => new Date(d)),
+      comment: comment || null,
     },
   });
 

@@ -25,6 +25,41 @@ export async function GET(
   return NextResponse.json(plan);
 }
 
+// PATCH /api/plans/[slug] — update plan (authenticated, owner only)
+export async function PATCH(
+  request: Request,
+  { params }: { params: { slug: string } }
+) {
+  const supabase = createServerSupabase();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const plan = await prisma.plan.findUnique({
+    where: { slug: params.slug },
+  });
+
+  if (!plan) {
+    return NextResponse.json({ error: "Plan not found" }, { status: 404 });
+  }
+
+  if (plan.creatorId !== user.id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const body = await request.json();
+  const { description } = body;
+
+  const updated = await prisma.plan.update({
+    where: { id: plan.id },
+    data: { description },
+  });
+
+  return NextResponse.json(updated);
+}
+
 // DELETE /api/plans/[slug] — delete a plan (authenticated, owner only)
 export async function DELETE(
   request: Request,

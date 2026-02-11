@@ -1,7 +1,17 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { createServerSupabase } from "@/lib/supabase/server";
 
-export default function Home() {
+export default async function Home() {
+  const supabase = createServerSupabase();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // Redirect logged-in users to dashboard
+  if (user) {
+    redirect("/dashboard");
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-8">
       <div className="max-w-2xl text-center space-y-6">
