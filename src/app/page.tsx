@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { createServerSupabase } from "@/lib/supabase/server";
 
 export default async function Home() {
-  const supabase = createServerSupabase();
+  const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
 
   // Redirect logged-in users to dashboard

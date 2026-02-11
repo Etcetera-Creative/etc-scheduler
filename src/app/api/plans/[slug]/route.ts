@@ -5,10 +5,11 @@ import { createServerSupabase } from "@/lib/supabase/server";
 // GET /api/plans/[slug] — public: get plan info for guests
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
+  const { slug } = await params;
   const plan = await prisma.plan.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
     select: {
       id: true,
       name: true,
@@ -28,17 +29,18 @@ export async function GET(
 // PATCH /api/plans/[slug] — update plan (authenticated, owner only)
 export async function PATCH(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  const supabase = createServerSupabase();
+  const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { slug } = await params;
   const plan = await prisma.plan.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
   });
 
   if (!plan) {
@@ -63,17 +65,18 @@ export async function PATCH(
 // DELETE /api/plans/[slug] — delete a plan (authenticated, owner only)
 export async function DELETE(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  const supabase = createServerSupabase();
+  const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { slug } = await params;
   const plan = await prisma.plan.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
   });
 
   if (!plan) {

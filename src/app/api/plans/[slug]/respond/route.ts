@@ -4,10 +4,11 @@ import { prisma } from "@/lib/prisma";
 // POST /api/plans/[slug]/respond — guest submits availability
 export async function POST(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
+  const { slug } = await params;
   const plan = await prisma.plan.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
   });
 
   if (!plan) {

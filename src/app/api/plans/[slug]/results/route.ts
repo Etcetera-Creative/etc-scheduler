@@ -4,10 +4,11 @@ import { prisma } from "@/lib/prisma";
 // GET /api/plans/[slug]/results — get plan with all responses
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
+  const { slug } = await params;
   const plan = await prisma.plan.findUnique({
-    where: { slug: params.slug },
+    where: { slug },
     include: {
       responses: {
         orderBy: { createdAt: "asc" },

@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 
 // GET /api/plans — list plans for the authenticated user
 export async function GET() {
-  const supabase = createServerSupabase();
+  const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -23,7 +23,7 @@ export async function GET() {
 
 // POST /api/plans — create a new plan
 export async function POST(request: Request) {
-  const supabase = createServerSupabase();
+  const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
