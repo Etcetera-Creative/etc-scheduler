@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { format, eachDayOfInterval, parseISO, isSameDay } from "date-fns";
+import { CalendarGrid } from "@/components/calendar-grid";
+import { parseISO, isSameDay } from "date-fns";
 
 interface PlanData {
   id: string;
@@ -45,10 +46,6 @@ export default function PlanGuestPage() {
       if (exists) return prev.filter((d) => !isSameDay(d, date));
       return [...prev, date];
     });
-  }
-
-  function isSelected(date: Date) {
-    return selectedDates.some((d) => isSameDay(d, date));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -112,30 +109,6 @@ export default function PlanGuestPage() {
     );
   }
 
-  const allDays = eachDayOfInterval({
-    start: parseISO(plan.startDate),
-    end: parseISO(plan.endDate),
-  });
-
-  // Group days by week for a calendar-like grid
-  const weeks: Date[][] = [];
-  let currentWeek: Date[] = [];
-  const firstDayOfWeek = allDays[0].getDay();
-
-  // Pad the first week
-  for (let i = 0; i < firstDayOfWeek; i++) {
-    currentWeek.push(null as unknown as Date);
-  }
-
-  for (const day of allDays) {
-    currentWeek.push(day);
-    if (currentWeek.length === 7) {
-      weeks.push(currentWeek);
-      currentWeek = [];
-    }
-  }
-  if (currentWeek.length > 0) weeks.push(currentWeek);
-
   return (
     <div className="max-w-2xl mx-auto p-8">
       <Card>
@@ -145,8 +118,7 @@ export default function PlanGuestPage() {
             <CardDescription>{plan.description}</CardDescription>
           )}
           <CardDescription>
-            Select the dates you&apos;re available ({format(parseISO(plan.startDate), "MMM d")} –{" "}
-            {format(parseISO(plan.endDate), "MMM d, yyyy")})
+            Select the dates you&apos;re available
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -155,7 +127,7 @@ export default function PlanGuestPage() {
               <Label htmlFor="guestName">Your Name</Label>
               <Input
                 id="guestName"
-                placeholder="e.g. Ben"
+                placeholder="John Doe"
                 value={guestName}
                 onChange={(e) => setGuestName(e.target.value)}
                 required
@@ -164,39 +136,13 @@ export default function PlanGuestPage() {
 
             <div className="space-y-2">
               <Label>Select Your Available Dates</Label>
-              <div className="border rounded-lg p-4">
-                <div className="grid grid-cols-7 gap-1 mb-2">
-                  {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-                    <div key={d} className="text-center text-xs font-medium text-muted-foreground py-1">
-                      {d}
-                    </div>
-                  ))}
-                </div>
-                {weeks.map((week, wi) => (
-                  <div key={wi} className="grid grid-cols-7 gap-1">
-                    {week.map((day, di) =>
-                      day ? (
-                        <button
-                          key={di}
-                          type="button"
-                          onClick={() => toggleDate(day)}
-                          className={`
-                            p-2 text-sm rounded-md transition-colors text-center
-                            ${isSelected(day)
-                              ? "bg-primary text-primary-foreground"
-                              : "hover:bg-accent"
-                            }
-                          `}
-                        >
-                          {format(day, "d")}
-                        </button>
-                      ) : (
-                        <div key={di} />
-                      )
-                    )}
-                  </div>
-                ))}
-              </div>
+              <CalendarGrid
+                rangeStart={parseISO(plan.startDate)}
+                rangeEnd={parseISO(plan.endDate)}
+                selectedDates={selectedDates}
+                onToggleDate={toggleDate}
+                selectable
+              />
               <p className="text-xs text-muted-foreground">
                 {selectedDates.length} date{selectedDates.length !== 1 ? "s" : ""} selected
               </p>

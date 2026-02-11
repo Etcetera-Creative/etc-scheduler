@@ -40,9 +40,13 @@ export default function DashboardPage() {
     load();
   }, []);
 
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    window.location.href = "/";
+  async function handleDelete(slug: string, name: string) {
+    if (!confirm(`Delete "${name}"? This will also delete all responses.`)) return;
+
+    const res = await fetch(`/api/plans/${slug}`, { method: "DELETE" });
+    if (res.ok) {
+      setPlans((prev) => prev.filter((p) => p.slug !== slug));
+    }
   }
 
   if (loading) {
@@ -57,14 +61,9 @@ export default function DashboardPage() {
     <div className="max-w-4xl mx-auto p-8">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold">Your Plans</h1>
-        <div className="flex gap-2">
-          <Link href="/dashboard/new">
-            <Button>New Plan</Button>
-          </Link>
-          <Button variant="outline" onClick={handleLogout}>
-            Sign Out
-          </Button>
-        </div>
+        <Link href="/dashboard/new">
+          <Button>New Plan</Button>
+        </Link>
       </div>
 
       {plans.length === 0 ? (
@@ -110,6 +109,13 @@ export default function DashboardPage() {
                     <Link href={`/plan/${plan.slug}/results`}>
                       <Button size="sm">View Results</Button>
                     </Link>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleDelete(plan.slug, plan.name)}
+                    >
+                      Delete
+                    </Button>
                   </div>
                 </div>
               </CardContent>
