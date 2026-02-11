@@ -36,6 +36,7 @@ export default function ResultsPage() {
 
   const [plan, setPlan] = useState<PlanWithResponses | null>(null);
   const [loading, setLoading] = useState(true);
+  const [unauthorized, setUnauthorized] = useState(false);
   const [copied, setCopied] = useState(false);
   const [selectedPerson, setSelectedPerson] = useState<ResponseData | null>(null);
   const [compareMode, setCompareMode] = useState(false);
@@ -49,17 +50,21 @@ export default function ResultsPage() {
   useEffect(() => {
     async function load() {
       const res = await fetch(`/api/plans/${slug}/results`);
+      if (res.status === 401) {
+        setUnauthorized(true);
+        setLoading(false);
+        return;
+      }
+      if (res.status === 403) {
+        setUnauthorized(true);
+        setLoading(false);
+        return;
+      }
       if (res.ok) {
         const planData = await res.json();
         setPlan(planData);
         setEditedDescription(planData.description || "");
-
-        // Check if current user is the owner
-        const supabase = createClient();
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user && planData.creatorId === user.id) {
-          setIsOwner(true);
-        }
+        setIsOwner(true); // If we got here, the API already verified ownership
       }
       setLoading(false);
     }
@@ -70,6 +75,17 @@ export default function ResultsPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
+
+  if (unauthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+        <p className="text-muted-foreground">You don&apos;t have access to this plan.</p>
+        <Link href="/login">
+          <Button>Log In</Button>
+        </Link>
       </div>
     );
   }
