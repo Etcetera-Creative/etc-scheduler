@@ -143,72 +143,74 @@ export default function ResultsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-8 py-6 sm:py-8 space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="min-w-0 flex-1">
-          <h1 className="text-2xl sm:text-3xl font-bold">{plan.name}</h1>
-          {isEditingDescription ? (
-            <div className="mt-2 space-y-2">
-              <Textarea
-                value={editedDescription}
-                onChange={(e) => setEditedDescription(e.target.value)}
-                rows={2}
-                placeholder="Add a description..."
-              />
-              <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  onClick={saveDescription}
-                  disabled={savingDescription}
-                >
-                  {savingDescription ? "Saving..." : "Save"}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setIsEditingDescription(false);
-                    setEditedDescription(plan.description || "");
-                  }}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className="mt-1 flex items-start gap-2">
-              <p className="text-muted-foreground flex-1">
-                {plan.description || (isOwner ? "No description" : "")}
-              </p>
-              {isOwner && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsEditingDescription(true)}
-                  className="h-auto py-1 px-2 text-xs"
-                >
-                  Edit
-                </Button>
-              )}
-            </div>
+      {/* Action Bar */}
+      <div className="flex items-center justify-between border-b pb-3">
+        <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          ← Back
+        </Link>
+        <div className="flex gap-2">
+          {isOwner && !isEditingDescription && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsEditingDescription(true)}
+            >
+              ✏️ Edit
+            </Button>
           )}
-        </div>
-        <div className="flex gap-2 w-full sm:w-auto">
-          <Link href={`/plan/${plan.slug}`} className="flex-1 sm:flex-none">
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">Share Page</Button>
+          <Link href={`/plan/${plan.slug}`}>
+            <Button variant="ghost" size="sm">🔗 Share Page</Button>
           </Link>
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
-            className="flex-1 sm:flex-none"
             onClick={() => {
               navigator.clipboard.writeText(shareUrl);
               setCopied(true);
               setTimeout(() => setCopied(false), 2000);
             }}
           >
-            {copied ? "Copied!" : "Copy Link"}
+            {copied ? "✓ Copied!" : "📋 Copy Link"}
           </Button>
         </div>
+      </div>
+
+      {/* Title & Description */}
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-bold">{plan.name}</h1>
+        {isEditingDescription ? (
+          <div className="mt-2 space-y-2">
+            <Textarea
+              value={editedDescription}
+              onChange={(e) => setEditedDescription(e.target.value)}
+              rows={2}
+              placeholder="Add a description..."
+            />
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                onClick={saveDescription}
+                disabled={savingDescription}
+              >
+                {savingDescription ? "Saving..." : "Save"}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setIsEditingDescription(false);
+                  setEditedDescription(plan.description || "");
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        ) : (
+          plan.description && (
+            <p className="text-muted-foreground mt-1">{plan.description}</p>
+          )
+        )}
       </div>
 
       {/* Tab Navigation */}
