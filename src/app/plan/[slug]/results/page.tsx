@@ -11,6 +11,7 @@ import { CalendarGrid } from "@/components/calendar-grid";
 import { ComparisonCalendar, getPersonColor } from "@/components/comparison-calendar";
 import { format, eachDayOfInterval, parseISO, isSameDay } from "date-fns";
 import { createClient } from "@/lib/supabase/client";
+import { Pencil, ExternalLink, Copy, Check } from "lucide-react";
 
 interface ResponseData {
   id: string;
@@ -153,24 +154,30 @@ export default function ResultsPage() {
             <Button
               variant="ghost"
               size="sm"
+              className="h-8 w-8 p-0"
               onClick={() => setIsEditingDescription(true)}
+              title="Edit description"
             >
-              ✏️ Edit
+              <Pencil className="h-4 w-4" />
             </Button>
           )}
           <Link href={`/plan/${plan.slug}`}>
-            <Button variant="ghost" size="sm">🔗 Share Page</Button>
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0" title="Share page">
+              <ExternalLink className="h-4 w-4" />
+            </Button>
           </Link>
           <Button
             variant="ghost"
             size="sm"
+            className="h-8 w-8 p-0"
             onClick={() => {
               navigator.clipboard.writeText(shareUrl);
               setCopied(true);
               setTimeout(() => setCopied(false), 2000);
             }}
+            title={copied ? "Copied!" : "Copy link"}
           >
-            {copied ? "✓ Copied!" : "📋 Copy Link"}
+            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
           </Button>
         </div>
       </div>

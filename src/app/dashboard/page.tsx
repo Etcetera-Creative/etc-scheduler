@@ -84,7 +84,7 @@ export default function DashboardPage() {
               <CardHeader>
                 <CardTitle className="text-xl">{plan.name}</CardTitle>
                 {plan.description && (
-                  <CardDescription>{plan.description}</CardDescription>
+                  <CardDescription className="line-clamp-2">{plan.description}</CardDescription>
                 )}
               </CardHeader>
               <CardContent>

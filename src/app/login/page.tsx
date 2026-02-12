@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +28,10 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+        options: { 
+          data: { display_name: displayName.trim() || null },
+          emailRedirectTo: `${window.location.origin}/auth/callback` 
+        },
       });
       if (error) setError(error.message);
       else setMessage("Check your email for a confirmation link!");
@@ -74,6 +78,18 @@ export default function LoginPage() {
                 required
               />
             </div>
+            {isSignUp && (
+              <div className="space-y-2">
+                <Label htmlFor="displayName">Display Name (Optional)</Label>
+                <Input
+                  id="displayName"
+                  type="text"
+                  placeholder="John Doe"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                />
+              </div>
+            )}
             {error && <p className="text-sm text-destructive">{error}</p>}
             {message && <p className="text-sm text-green-600">{message}</p>}
             <Button type="submit" className="w-full" disabled={loading}>
@@ -82,7 +98,12 @@ export default function LoginPage() {
           </form>
           <div className="mt-4 text-center text-sm">
             <button
-              onClick={() => { setIsSignUp(!isSignUp); setError(null); setMessage(null); }}
+              onClick={() => { 
+                setIsSignUp(!isSignUp); 
+                setError(null); 
+                setMessage(null); 
+                setDisplayName("");
+              }}
               className="text-primary hover:underline"
             >
               {isSignUp ? "Already have an account? Sign in" : "Need an account? Sign up"}

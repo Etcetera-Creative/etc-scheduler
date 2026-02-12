@@ -15,6 +15,7 @@ model Plan {
   startDate   DateTime
   endDate     DateTime
   creatorId   String     // Supabase user ID
+  creatorName String?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   responses   Response[]

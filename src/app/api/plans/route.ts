@@ -39,6 +39,9 @@ export async function POST(request: Request) {
 
   const slug = nanoid(10);
 
+  // Get creator's display name from user metadata
+  const creatorName = user.user_metadata?.display_name || null;
+
   const plan = await prisma.plan.create({
     data: {
       slug,
@@ -47,6 +50,7 @@ export async function POST(request: Request) {
       startDate: new Date(startDate),
       endDate: new Date(endDate),
       creatorId: user.id,
+      creatorName,
     },
   });
 

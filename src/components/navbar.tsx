@@ -4,11 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { CircleUser, Plus, LogOut } from "lucide-react";
 
 export function Navbar() {
   const pathname = usePathname();
   const [loggedIn, setLoggedIn] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -16,6 +19,20 @@ export function Navbar() {
       setLoggedIn(!!user);
     });
   }, []);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    }
+    
+    if (dropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [dropdownOpen]);
 
   // Don't show navbar on landing or login pages
   if (pathname === "/" || pathname === "/login") return null;
@@ -40,18 +57,37 @@ export function Navbar() {
           {loggedIn ? (
             <>
               <Link href="/dashboard/new">
-                <Button size="sm">New Plan</Button>
+                <Button size="sm" className="hidden sm:flex">
+                  New Plan
+                </Button>
+                <Button size="sm" className="sm:hidden h-8 w-8 p-0">
+                  <Plus className="h-4 w-4" />
+                </Button>
               </Link>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={async () => {
-                  await supabase.auth.signOut();
-                  window.location.href = "/";
-                }}
-              >
-                Sign Out
-              </Button>
+              <div className="relative" ref={dropdownRef}>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-8 w-8 p-0"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  <CircleUser className="h-5 w-5" />
+                </Button>
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-50">
+                    <button
+                      onClick={async () => {
+                        await supabase.auth.signOut();
+                        window.location.href = "/";
+                      }}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent transition-colors"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <Link href="/login">

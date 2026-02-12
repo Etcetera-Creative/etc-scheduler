@@ -16,6 +16,7 @@ interface PlanData {
   description: string | null;
   startDate: string;
   endDate: string;
+  creatorName: string | null;
 }
 
 export default function PlanGuestPage() {
@@ -117,6 +118,11 @@ export default function PlanGuestPage() {
       <Card>
         <CardHeader>
           <CardTitle>{plan.name}</CardTitle>
+          {plan.creatorName && (
+            <CardDescription className="text-sm">
+              Invited by: {plan.creatorName}
+            </CardDescription>
+          )}
           {plan.description && (
             <CardDescription>{plan.description}</CardDescription>
           )}

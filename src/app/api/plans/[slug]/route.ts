@@ -16,6 +16,7 @@ export async function GET(
       description: true,
       startDate: true,
       endDate: true,
+      creatorName: true,
     },
   });
 
