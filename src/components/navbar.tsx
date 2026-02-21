@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState, useRef } from "react";
-import { CircleUser, Plus, LogOut } from "lucide-react";
+import { CircleUser, Plus, LogOut, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -13,6 +14,7 @@ export function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const supabase = createClient();
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -75,6 +77,17 @@ export function Navbar() {
                 </Button>
                 {dropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-background border rounded-md shadow-lg z-50">
+                    <button
+                      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent transition-colors"
+                    >
+                      {theme === "dark" ? (
+                        <Sun className="h-4 w-4" />
+                      ) : (
+                        <Moon className="h-4 w-4" />
+                      )}
+                      {theme === "dark" ? "Light Mode" : "Dark Mode"}
+                    </button>
                     <button
                       onClick={async () => {
                         await supabase.auth.signOut();
