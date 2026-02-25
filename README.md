@@ -1,4 +1,4 @@
-# Etcetera Scheduler
+# Etc Tools
 
 A collaborative scheduling tool that helps groups find the best time to meet.
 
