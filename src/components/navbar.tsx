@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState, useRef } from "react";
-import { CircleUser, LogOut, Moon, Sun } from "lucide-react";
+import { CircleUser, KeyRound, LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 export function Navbar() {
@@ -38,8 +38,9 @@ export function Navbar() {
     }
   }, [dropdownOpen]);
 
-  // Don't show navbar on landing or login pages
-  if (pathname === "/" || pathname === "/login") return null;
+  // Don't show navbar on login page; show on landing only if logged in
+  if (pathname === "/login") return null;
+  if (pathname === "/" && !loggedIn) return null;
 
   return (
     <nav className="border-b bg-background">
@@ -98,6 +99,13 @@ export function Navbar() {
                       )}
                       {theme === "dark" ? "Light Mode" : "Dark Mode"}
                     </button>
+                    <a
+                      href="/reset-password"
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent transition-colors"
+                    >
+                      <KeyRound className="h-4 w-4" />
+                      Change Password
+                    </a>
                     <button
                       onClick={async () => {
                         await supabase.auth.signOut();
