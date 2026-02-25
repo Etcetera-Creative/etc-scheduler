@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState, useRef } from "react";
-import { CircleUser, Plus, LogOut, Moon, Sun } from "lucide-react";
+import { CircleUser, LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 export function Navbar() {
@@ -76,14 +76,6 @@ export function Navbar() {
         <div className="flex items-center gap-2 shrink-0">
           {loggedIn ? (
             <>
-              <Link href="/dashboard/new">
-                <Button size="sm" className="hidden sm:flex">
-                  New Plan
-                </Button>
-                <Button size="sm" className="sm:hidden h-8 w-8 p-0">
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </Link>
               <div className="relative" ref={dropdownRef}>
                 <Button
                   size="sm"
