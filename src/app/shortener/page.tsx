@@ -7,10 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { ArrowRight, Link as LinkIcon } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function ShortenerPage() {
-  const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [destinationUrl, setDestinationUrl] = useState("");
@@ -18,16 +17,15 @@ export default function ShortenerPage() {
   const [expiration, setExpiration] = useState("30");
   const [error, setError] = useState("");
   const [result, setResult] = useState<{ slug: string; shortUrl: string } | null>(null);
-  const supabase = createClient();
 
   useEffect(() => {
     async function checkAuth() {
+      const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         window.location.href = "/login";
         return;
       }
-      setLoggedIn(true);
       setLoading(false);
     }
     checkAuth();

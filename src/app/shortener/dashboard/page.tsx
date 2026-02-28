@@ -20,10 +20,10 @@ interface ShortLink {
 export default function ShortenerDashboardPage() {
   const [links, setLinks] = useState<ShortLink[]>([]);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
   useEffect(() => {
     async function load() {
+      const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         window.location.href = "/login";
@@ -91,8 +91,6 @@ export default function ShortenerDashboardPage() {
         <div className="grid gap-4">
           {links.map((link) => {
             const isExpired = link.expiresAt && isPast(new Date(link.expiresAt));
-            const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
-            const shortUrl = `${baseUrl}/s/${link.slug}`;
 
             return (
               <Card key={link.id}>

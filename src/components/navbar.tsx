@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, CircleUser, KeyRound, LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -16,7 +16,7 @@ export function Navbar() {
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
   const toolsDropdownRef = useRef<HTMLDivElement>(null);
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export function Navbar() {
       setLoggedIn(!!user);
       setIsAdmin(user?.email === "jamie@etcetera.cr");
     });
-  }, []);
+  }, [supabase]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

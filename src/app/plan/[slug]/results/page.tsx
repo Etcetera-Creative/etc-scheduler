@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { CalendarGrid } from "@/components/calendar-grid";
-import { ComparisonCalendar, getPersonColor } from "@/components/comparison-calendar";
+import { ComparisonCalendar } from "@/components/comparison-calendar";
 import { TimeHeatmapBar } from "@/components/time-heatmap-bar";
 import { format, eachDayOfInterval, parseISO, isSameDay } from "date-fns";
 import { Pencil } from "lucide-react";

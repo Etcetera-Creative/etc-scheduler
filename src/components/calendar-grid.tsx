@@ -1,6 +1,6 @@
 "use client";
 
-import { format, eachDayOfInterval, startOfMonth, endOfMonth, isSameDay, isSameMonth, isWithinInterval, getDay, addMonths } from "date-fns";
+import { format, eachDayOfInterval, startOfMonth, endOfMonth, isSameDay, isWithinInterval, getDay, addMonths } from "date-fns";
 
 interface CalendarGridProps {
   rangeStart: Date;

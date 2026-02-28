@@ -29,10 +29,10 @@ export default function ShortLinkAnalyticsPage() {
   const [link, setLink] = useState<ShortLink | null>(null);
   const [clicks, setClicks] = useState<LinkClick[]>([]);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
   useEffect(() => {
     async function load() {
+      const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         window.location.href = "/login";
