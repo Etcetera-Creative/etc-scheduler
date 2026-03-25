@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { createServerSupabase } from "@/lib/supabase/server";
-import { Calendar, Link as LinkIcon } from "lucide-react";
+import { Calendar, Link as LinkIcon, Lightbulb } from "lucide-react";
 
 export default async function Home() {
   const supabase = await createServerSupabase();
@@ -38,7 +38,7 @@ export default async function Home() {
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-6">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Link href="/scheduler">
           <Card className="hover:border-primary transition-colors cursor-pointer h-full">
             <CardHeader>
@@ -68,6 +68,23 @@ export default async function Home() {
             <CardContent>
               <Button variant="secondary" className="w-full">
                 Open URL Shortener
+              </Button>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link href="/suggestions">
+          <Card className="hover:border-primary transition-colors cursor-pointer h-full">
+            <CardHeader>
+              <Lightbulb className="h-8 w-8 mb-2 text-primary" />
+              <CardTitle>Feature Suggestions</CardTitle>
+              <CardDescription>
+                Have an idea for a new tool or improvement? Submit your suggestions and help shape what gets built next.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="secondary" className="w-full">
+                Submit Ideas
               </Button>
             </CardContent>
           </Card>
