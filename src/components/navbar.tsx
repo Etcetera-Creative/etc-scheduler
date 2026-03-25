@@ -58,6 +58,11 @@ export function Navbar() {
       href: "/shortener",
       active: pathname.startsWith("/shortener"),
     },
+    {
+      label: "Feature Suggestions",
+      href: "/suggestions",
+      active: pathname.startsWith("/suggestions"),
+    },
     ...(isAdmin
       ? [
           {
