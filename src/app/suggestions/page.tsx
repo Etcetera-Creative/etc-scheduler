@@ -187,7 +187,7 @@ export default function SuggestionsPage() {
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-lg">{s.title}</h3>
+                      <h3 className="font-semibold text-lg break-words">{s.title}</h3>
                       <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
                         <span>
                           {s.category === "EXISTING_TOOL"
@@ -214,13 +214,13 @@ export default function SuggestionsPage() {
                       {s.status}
                     </span>
                   </div>
-                  <p className="mt-3 text-sm text-muted-foreground whitespace-pre-wrap">
+                  <p className="mt-3 text-sm text-muted-foreground whitespace-pre-wrap break-words overflow-hidden">
                     {s.description}
                   </p>
                   {s.adminNotes && (
-                    <div className="mt-3 p-3 bg-muted rounded-md">
+                    <div className="mt-3 p-3 bg-muted rounded-md overflow-hidden">
                       <p className="text-xs font-medium mb-1">Admin response:</p>
-                      <p className="text-sm">{s.adminNotes}</p>
+                      <p className="text-sm break-words">{s.adminNotes}</p>
                     </div>
                   )}
                 </CardContent>

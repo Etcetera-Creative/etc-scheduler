@@ -188,7 +188,7 @@ export default function ResultsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl sm:text-3xl font-bold">{plan.name}</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold break-words">{plan.name}</h1>
             {isOwner && !isEditingDescription && (
               <Button
                 variant="ghost"
@@ -410,7 +410,7 @@ export default function ResultsPage() {
                     >
                       <div className="w-full flex items-start justify-between">
                         <div className="flex-1">
-                          <p className="font-medium">{r.guestName}</p>
+                          <p className="font-medium break-words">{r.guestName}</p>
                           <p className="text-sm text-muted-foreground">
                             {r.selectedDates.map((d) => format(parseISO(d), "MMM d")).join(", ")}
                           </p>

@@ -247,14 +247,14 @@ export default function AdminDashboardPage() {
                           }
                         }}
                       >
-                        <td className="py-3 pr-4 font-medium">{s.title}</td>
-                        <td className="py-3 pr-4 text-muted-foreground">
+                        <td className="py-3 pr-4 font-medium break-words max-w-[200px]">{s.title}</td>
+                        <td className="py-3 pr-4 text-muted-foreground break-words">
                           {s.submitterName || "Unknown"}
                         </td>
                         <td className="py-3 pr-4 text-muted-foreground whitespace-nowrap">
                           {s.category === "EXISTING_TOOL" ? "Existing" : "New tool"}
                         </td>
-                        <td className="py-3 pr-4 text-muted-foreground">
+                        <td className="py-3 pr-4 text-muted-foreground break-words max-w-[150px]">
                           {s.tool || "—"}
                         </td>
                         <td className="py-3 pr-4 text-muted-foreground whitespace-nowrap">
@@ -276,7 +276,7 @@ export default function AdminDashboardPage() {
                             <div className="space-y-4">
                               <div>
                                 <p className="text-sm font-medium mb-1">Description</p>
-                                <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                                <p className="text-sm text-muted-foreground whitespace-pre-wrap break-words overflow-hidden">
                                   {s.description}
                                 </p>
                               </div>

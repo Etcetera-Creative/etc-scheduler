@@ -62,7 +62,7 @@ export function ComparisonCalendar({ rangeStart, rangeEnd, people }: ComparisonC
           return (
             <div key={person.id} className="flex items-center gap-2">
               <div className={`w-3 h-3 rounded-full ${colors.bg}`} />
-              <span className="text-sm font-medium">{person.name}</span>
+              <span className="text-sm font-medium break-words">{person.name}</span>
             </div>
           );
         })}

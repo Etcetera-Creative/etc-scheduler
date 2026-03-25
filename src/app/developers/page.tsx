@@ -266,7 +266,7 @@ export default function DevelopersPage() {
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium">{key.name}</span>
+                        <span className="font-medium break-words">{key.name}</span>
                         {key.revoked && (
                           <span className="text-xs px-1.5 py-0.5 rounded bg-red-500/10 text-red-600 dark:text-red-400">
                             Revoked
