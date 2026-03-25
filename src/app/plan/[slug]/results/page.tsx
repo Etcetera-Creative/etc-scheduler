@@ -219,7 +219,7 @@ export default function ResultsPage() {
               </div>
             </div>
           ) : (
-            <p className="mt-1 text-muted-foreground">
+            <p className="mt-1 text-muted-foreground break-words overflow-hidden">
               {plan.description || (isOwner ? "No description" : "")}
             </p>
           )}
@@ -420,7 +420,7 @@ export default function ResultsPage() {
                         </span>
                       </div>
                       {r.comment && (
-                        <p className="text-sm text-muted-foreground mt-2 italic">&ldquo;{r.comment}&rdquo;</p>
+                        <p className="text-sm text-muted-foreground mt-2 italic break-words overflow-hidden">&ldquo;{r.comment}&rdquo;</p>
                       )}
                     </button>
                   </div>

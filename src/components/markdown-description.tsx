@@ -11,7 +11,7 @@ export function MarkdownDescription({
 }: MarkdownDescriptionProps) {
   return (
     <div
-      className={`prose prose-sm max-w-none bg-muted/50 rounded-lg p-4 border-l-4 border-primary/20 ${className}`}
+      className={`prose prose-sm max-w-none bg-muted/50 rounded-lg p-4 border-l-4 border-primary/20 overflow-hidden break-words [&_a]:break-all [&_img]:max-w-full ${className}`}
     >
       <ReactMarkdown>{content}</ReactMarkdown>
     </div>

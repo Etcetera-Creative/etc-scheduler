@@ -80,11 +80,11 @@ export default function DashboardPage() {
       ) : (
         <div className="grid gap-4">
           {plans.map((plan) => (
-            <Card key={plan.id}>
-              <CardHeader>
-                <CardTitle className="text-xl">{plan.name}</CardTitle>
+            <Card key={plan.id} className="overflow-hidden">
+              <CardHeader className="min-w-0">
+                <CardTitle className="text-xl break-words">{plan.name}</CardTitle>
                 {plan.description && (
-                  <CardDescription className="line-clamp-2 break-words overflow-hidden">{plan.description}</CardDescription>
+                  <CardDescription className="line-clamp-2 break-all overflow-hidden">{plan.description}</CardDescription>
                 )}
               </CardHeader>
               <CardContent>
