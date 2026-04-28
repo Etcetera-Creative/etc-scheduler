@@ -59,6 +59,11 @@ export function Navbar() {
       active: pathname.startsWith("/shortener"),
     },
     {
+      label: "Personality Quiz",
+      href: "/personality",
+      active: pathname.startsWith("/personality"),
+    },
+    {
       label: "Feature Suggestions",
       href: "/suggestions",
       active: pathname.startsWith("/suggestions"),

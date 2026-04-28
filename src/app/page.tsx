@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { createServerSupabase } from "@/lib/supabase/server";
-import { Calendar, Link as LinkIcon, Lightbulb } from "lucide-react";
+import { Brain, Calendar, Link as LinkIcon, Lightbulb } from "lucide-react";
 
 export default async function Home() {
   const supabase = await createServerSupabase();
@@ -68,6 +68,23 @@ export default async function Home() {
             <CardContent>
               <Button variant="secondary" className="w-full">
                 Open URL Shortener
+              </Button>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link href="/personality">
+          <Card className="hover:border-primary transition-colors cursor-pointer h-full">
+            <CardHeader>
+              <Brain className="h-8 w-8 mb-2 text-primary" />
+              <CardTitle>Etc Personality Quiz</CardTitle>
+              <CardDescription>
+                Create a word-based personality quiz, share it with friends, and compare how you see yourself with how other people describe you.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="secondary" className="w-full">
+                Open Personality Quiz
               </Button>
             </CardContent>
           </Card>

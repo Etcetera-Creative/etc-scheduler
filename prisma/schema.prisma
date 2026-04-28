@@ -99,3 +99,35 @@ model FeatureSuggestion {
   @@index([submitterId])
   @@index([status])
 }
+
+
+model PersonalityQuiz {
+  id             String                @id @default(cuid())
+  ownerToken     String                @unique
+  shareToken     String                @unique
+  title          String
+  description    String?
+  instructions   String?
+  selectionCount Int
+  creatorId      String
+  creatorName    String?
+  selfWords      String[]
+  wordPool       String[]
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+  responses      PersonalityResponse[]
+
+  @@index([creatorId])
+}
+
+model PersonalityResponse {
+  id            String          @id @default(cuid())
+  quizId        String
+  responseToken String          @unique
+  selectedWords String[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  quiz          PersonalityQuiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([quizId])
+}
